@@ -21,22 +21,22 @@ class member_detail extends Model
         'profile_photo',
     ];
 
-    public function gym()
+    public function users()
     {
         return $this->belongsTo(users::class, 'gym_id');
     }
 
-    public function plans()
+    public function gym_plan()
     {
         return $this->hasMany(gym_plan::class, 'user_id');
     }
 
-    public function personalTrainers()
+    public function personal_trainer()
     {
         return $this->hasMany(personal_trainer::class, 'user_id');
     }
 
-    public function payments()
+    public function member_payment()
     {
         return $this->hasMany(member_payment::class, 'user_id');
     }

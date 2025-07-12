@@ -11,11 +11,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class add_member_controller extends Controller
 {
+    // add member
     public function addMember(Request $request)
     {
+
+        DB::beginTransaction();
+
         try {
             // var_dump("memberdetails");
             $member = member_detail::create([
@@ -31,17 +36,20 @@ class add_member_controller extends Controller
             ]);
 
 
-            // var_dump("plan_types");
 
             foreach ($request->plans as $plan) {
-                plan_types::create([
-                    'gym_id' => $request['gym_id'],
-                    'plan_name' => $plan['plan_name'],
-                ]);
+                $exists = plan_types::where('plan_name', $plan['plan_name'])
+                    ->where('gym_id', $request['gym_id'])
+                    ->exists();
+
+                if (!$exists) {
+                    plan_types::create([
+                        'gym_id' => $request['gym_id'],
+                        'plan_name' => $plan['plan_name'],
+                    ]);
+                }
             }
 
-
-            // var_dump("gym_plan");
 
             foreach ($request->plans as $plan) {
                 gym_plan::create([
@@ -78,19 +86,87 @@ class add_member_controller extends Controller
                 'next_payment_date' => $request['next_payment_date'],
             ]);
 
+            DB::commit();
+
             return response()->json([
                 'success' => true,
                 'message' => 'Member added successfully',
             ], 201);
         } catch (Exception $e) {
-            // Optional: log the error
             Log::error('User Login Error: ' . $e->getMessage());
+
+            DB::rollBack();
 
             return response()->json([
                 'success' => false,
                 'message' => 'An unexpected error occurred. Please try again later.',
                 'error'   => $e->getMessage(), // In production, you might want to hide this
             ], 500);
+        }
+    }
+
+    // get member
+    public function getMemberByID(Request $request, $id)
+    {
+        try {
+
+            $member = member_detail::with('gym_plan', 'personal_trainer', 'member_payment')
+                ->where('id', $id)->get();
+
+            if ($member->isnotEmpty()) {
+                return response()->json(['member' => $member]);
+            } else {
+                return response()->json(['message' => 'Member not found'], 404);
+            }
+        } catch (Exception $e) {
+            Log::error('User Login Error: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'An unexpected error occurred. Please try again later.',
+                'error'   => $e->getMessage(), // In production, you might want to hide this
+            ]);
+        }
+    }
+
+    // get all member by gym
+    public function getAllMembers(Request $request)
+    {
+        try {
+            $allMember = member_detail::with(['gym_plan', 'personal_trainer', 'member_payment'])
+                ->where('gym_id', $request->gym_id)
+                ->get();
+            return response()->json(['data' => $allMember], 200);
+        } catch (Exception $e) {
+            Log::error('User Login Error: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'An unexpected error occurred. Please try again later.',
+                'error'   => $e->getMessage(), // In production, you might want to hide this
+            ]);
+        }
+    }
+
+    // delete by ID
+    public function DeleteMemberById(Request $request, $id)
+    {
+        try {
+            $member = member_detail::find($id);
+            if ($member) {
+                $member->delete();
+                return response()->json(['message' => 'User deleted']);
+            } else {
+                return response()->json(['message' => 'User not found'], 404);
+            };
+        } catch (Exception $e) {
+            Log::error('User Login Error: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'An unexpected error occurred. Please try again later.',
+                'error'   => $e->getMessage(), // In production, you might want to hide this
+            ]);
         }
     }
 }

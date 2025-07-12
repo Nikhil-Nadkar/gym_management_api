@@ -19,3 +19,6 @@ Route::get('/test', function () {
 Route::post("/signup", [AuthController::class, 'userSignup']);
 Route::post("/login", [AuthController::class, 'userLogin']);
 Route::post('/addmember', [add_member_controller::class, 'addMember'])->middleware('auth:sanctum');
+Route::post('/getmemberbyid/{id}', [add_member_controller::class, 'getMemberByID']);
+Route::post('/getallmember', [add_member_controller::class, 'getAllMembers']);
+Route::delete('/deletememberbyid/{id}', [add_member_controller::class, 'DeleteMemberById']);

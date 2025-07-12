@@ -20,12 +20,12 @@ class gym_plan extends Model
         'price',
     ];
 
-    public function member()
+    public function member_detail()
     {
         return $this->belongsTo(member_detail::class, 'user_id');
     }
 
-    public function gym()
+    public function users()
     {
         return $this->belongsTo(users::class, 'gym_id');
     }

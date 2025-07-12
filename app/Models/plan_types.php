@@ -14,7 +14,7 @@ class plan_types extends Model
         'plan_name',
     ];
 
-    public function gym()
+    public function users()
     {
         return $this->belongsTo(users::class, 'gym_id');
     }
