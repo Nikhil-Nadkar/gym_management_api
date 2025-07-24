@@ -21,6 +21,8 @@ class member_detail extends Model
         'profile_photo',
     ];
 
+    protected $hidden = ['created_at', 'updated_at']; // Hide timestamps
+
     public function users()
     {
         return $this->belongsTo(users::class, 'gym_id');

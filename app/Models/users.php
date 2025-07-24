@@ -20,4 +20,5 @@ class users extends Model
         'password',
         'gymlogo',
     ];
+    protected $hidden = ['created_at', 'updated_at']; // Hide timestamps
 }

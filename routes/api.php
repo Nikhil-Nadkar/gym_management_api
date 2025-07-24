@@ -22,3 +22,5 @@ Route::post('/addmember', [add_member_controller::class, 'addMember'])->middlewa
 Route::post('/getmemberbyid/{id}', [add_member_controller::class, 'getMemberByID']);
 Route::post('/getallmember', [add_member_controller::class, 'getAllMembers']);
 Route::delete('/deletememberbyid/{id}', [add_member_controller::class, 'DeleteMemberById']);
+Route::put('/updatemember/{id}', [add_member_controller::class, 'updateMember']);
+Route::post('/renewmemberplan/{id}', [add_member_controller::class, 'renewPlan']);

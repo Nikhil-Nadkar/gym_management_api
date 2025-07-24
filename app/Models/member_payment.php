@@ -20,6 +20,8 @@ class member_payment extends Model
         'next_payment_date',
     ];
 
+    protected $hidden = ['created_at', 'updated_at']; //  Hide timestamps
+
     public function member_detail()
     {
         return $this->belongsTo(member_detail::class, 'user_id');

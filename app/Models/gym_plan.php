@@ -20,6 +20,9 @@ class gym_plan extends Model
         'price',
     ];
 
+    protected $hidden = ['created_at', 'updated_at']; // Hide timestamps
+
+
     public function member_detail()
     {
         return $this->belongsTo(member_detail::class, 'user_id');
