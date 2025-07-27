@@ -13,13 +13,17 @@ class member_detail extends Model
         'gym_id',
         'name',
         'gender',
-        'joining_data',
+        'dob',
         'phone',
         'email',
         'ref_by',
         'address',
         'profile_photo',
     ];
+
+    // protected $casts = [
+    //     'dob' => 'date',
+    // ];
 
     protected $hidden = ['created_at', 'updated_at']; // Hide timestamps
 

@@ -351,4 +351,7 @@ class add_member_controller extends Controller
             ]);
         }
     }
+
+    // Total profit
+    public  function totalProfit(Request $request, $id) {}
 }
