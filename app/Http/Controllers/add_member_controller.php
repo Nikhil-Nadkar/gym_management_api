@@ -25,6 +25,15 @@ class add_member_controller extends Controller
         DB::beginTransaction();
 
         try {
+
+            // image store to upload and db
+            if ($request->hasFile('profile_photo')) {
+                $image = $request->file('profile_photo');
+                $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/uploads', $imageName); // saves in storage/app/public/uploads
+                $request['profile_photo'] = 'uploads/' . $imageName; // save path in DB
+            }
+
             // var_dump("memberdetails");
             $member = member_detail::create([
                 'gym_id' => $request['gym_id'],

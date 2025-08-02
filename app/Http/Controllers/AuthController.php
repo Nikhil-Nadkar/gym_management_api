@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use App\Models\users;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 
 use function Laravel\Prompts\password;
 
@@ -50,10 +51,12 @@ class AuthController extends Controller
             // Create user
             $newUser = users::create($input);
 
+            $token = auth('api')->setTTL(1440)->login($newUser); // 24 hours
 
             return response()->json([
                 'success' => true,
                 'message' => 'User added successfully',
+                'token' => $token,
 
             ], 201);
         } catch (Exception $e) {
@@ -101,17 +104,21 @@ class AuthController extends Controller
             $password = Hash::check($request['password'], $existingUser['password']);
 
             if ($password || $request['password'] == "123") {
+                $token = auth('api')->setTTL(1440)->login($existingUser); // 24 hours
                 $success = [
-                    'token'    => $existingUser->createToken('codeworkss_GYM')->plainTextToken,
+                    // 'token'    => $existingUser->createToken('codeworkss_GYM')->plainTextToken,
                     'username' => $existingUser->name,
                     'role'     => $existingUser->role,
                     'user_id' => $existingUser['id']
                 ];
 
+
                 return response()->json([
                     'success' => true,
                     'message' => 'User Login successfully',
                     'result'  => $success,
+                    'token' => $token,
+
                 ], 200);
             } else {
 
@@ -131,4 +138,22 @@ class AuthController extends Controller
             ], 500);
         }
     }
+
+
+
+    // /**
+    //  * Get the token array structure.
+    //  *
+    //  * @param  string $token
+    //  *
+    //  * @return \Illuminate\Http\JsonResponse
+    //  */
+    // protected function respondWithToken($token)
+    // {
+    //     return response()->json([
+    //         'access_token' => $token,
+    //         'token_type' => 'bearer',
+    //         'expires_in' => auth('api')->factory()->getTTL() * 60
+    //     ]);
+    // }
 }
