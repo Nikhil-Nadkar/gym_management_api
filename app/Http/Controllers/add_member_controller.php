@@ -163,7 +163,7 @@ class add_member_controller extends Controller
                 'personal_trainer:id,user_id,pt_name,start_date,end_date',
                 'member_payment:id,user_id,total_amount,payment_status,next_payment_amount'
             ])->select('id', 'name', 'phone')
-                ->where('gym_id', $request->gym_id)
+                ->where('gym_id', $request['gym_id'])
                 ->get();
 
             // $allPlans = gym_plan::where('gym_id', $request->gym_id)

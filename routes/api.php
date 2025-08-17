@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\add_member_controller;
+use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\VisitorController;
@@ -46,4 +47,7 @@ Route::middleware(['jwt.json'])->group(function () {
     Route::get('/getallexpense', [ExpenseController::class, 'GetAllExpense']);
     Route::put('/updateexpense/{id}', [ExpenseController::class, 'UpdateExpense']);
     Route::delete('/deleteexpense/{id}', [ExpenseController::class, 'DeleteExpense']);
+
+    // AnalyticsDashBoard
+    Route::post("/AnalyticsDashBoard/{id}", [AnalyticsController::class, 'AnalyticsDashBoard']);
 });

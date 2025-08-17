@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('ref_by')->nullable();
             $table->string('address')->nullable();
             $table->string('profile_photo')->nullable();
+            $table->date('planEndDate')->nullable();
             $table->timestamps();
         });
 

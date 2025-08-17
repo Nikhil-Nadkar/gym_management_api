@@ -19,6 +19,7 @@ class member_detail extends Model
         'ref_by',
         'address',
         'profile_photo',
+        'planEndDate',
     ];
 
     // protected $casts = [
